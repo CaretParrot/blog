@@ -3,18 +3,40 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 @customElement("blog-entry")
 export class BlogEntry extends LitElement {
-    @property()
+    @property({type: String})
     title: string = "";
     
-    @property()
+    @property({type: String})
     description: string = "";
 
-    @property()
+    @property({type: String})
     imageURL?: string = "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png";
 
     static styles = css`
+        div {
+            margin: var(--base-unit);
+        }
+
+        .outer-wrapper {
+            display: grid;
+            grid: auto / auto auto;
+            margin: var(--base-unit);
+            border: calc(var(--base-unit) / 4) solid hsla(0, 0%, 0%, 1);
+            border-radius: var(--base-unit);
+        }
+
+        .text {
+            display: grid;
+            grid: auto / 1fr;
+        }
+
+        h1, p {
+            width: 100%;
+            padding: var(--base-unit);
+        }
+
         img {
-            width: 10%;
+            width: 50%;
         }
     `;
 
@@ -27,14 +49,19 @@ export class BlogEntry extends LitElement {
     }
 
     imageTemplate() {
-        return html`<img src="${this.imageURL}" />`;
+        return html`<img src="${this.imageURL || "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png"}" />`;
     }
     
     render() {
         return html`
-            ${this.titleTemplate()}
-            ${this.descriptionTemplate()}
-            ${this.imageTemplate()}
+            <div class="outer-wrapper">
+                <div class="text">
+                    ${this.titleTemplate()}
+                    ${this.descriptionTemplate()}
+                </div>
+
+                ${this.imageTemplate()}
+            </div>
         `;
     }
 }

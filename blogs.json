@@ -2,5 +2,9 @@
     {
         "title": "Hello there!",
         "description": "Testing out blog making"
+    },
+    {
+        "title": "Testing",
+        "description": "How does this work?"
     }
 ]
