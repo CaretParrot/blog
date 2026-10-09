@@ -12,34 +12,6 @@ export class BlogEntry extends LitElement {
     @property({type: String})
     imageURL?: string = "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png";
 
-    static styles = css`
-        div {
-            margin: var(--base-unit);
-        }
-
-        .outer-wrapper {
-            display: grid;
-            grid: auto / auto auto;
-            margin: var(--base-unit);
-            border: calc(var(--base-unit) / 4) solid hsla(0, 0%, 0%, 1);
-            border-radius: var(--base-unit);
-        }
-
-        .text {
-            display: grid;
-            grid: auto / 1fr;
-        }
-
-        h1, p {
-            width: 100%;
-            padding: var(--base-unit);
-        }
-
-        img {
-            width: 50%;
-        }
-    `;
-
     titleTemplate() {
         return html`<h1>${this.title}</h1>`;
     }
@@ -49,19 +21,19 @@ export class BlogEntry extends LitElement {
     }
 
     imageTemplate() {
-        return html`<img src="${this.imageURL || "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png"}" />`;
+        return html`<img style="
+            width: 100%;
+        " src="${this.imageURL || "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png"}" />`;
     }
     
     render() {
         return html`
-            <div class="outer-wrapper">
-                <div class="text">
-                    ${this.titleTemplate()}
-                    ${this.descriptionTemplate()}
-                </div>
-
-                ${this.imageTemplate()}
+            <div>
+                ${this.titleTemplate()}
+                ${this.descriptionTemplate()}
             </div>
+
+            ${this.imageTemplate()}
         `;
     }
 }

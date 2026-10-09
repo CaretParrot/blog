@@ -1,14 +1,11 @@
-blog-entry {
-    padding: 0;
-    margin: 0;
-    background-color: transparent;
-    border: none;
-}
-
 blog-database {
+    background-color: var(--container);
     padding: 0;
 }
 
-slot {
-    padding: var(--base-unit);
+blog-entry {
+    background-color: var(--element);
+    display: grid;
+    grid: auto / 5fr 1fr;
+    margin: var(--base-unit);
 }
