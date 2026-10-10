@@ -12,6 +12,12 @@ export class BlogEntry extends LitElement {
     @property({type: String})
     imageURL?: string = "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png";
 
+    static styles = css`
+        :host {
+            cursor: pointer;
+        }
+    `;
+
     titleTemplate() {
         return html`<h1>${this.title}</h1>`;
     }
