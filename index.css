@@ -9,3 +9,7 @@ blog-entry {
     grid: auto / 5fr 1fr;
     margin: var(--base-unit);
 }
+
+time {
+    font-style: italic;
+}

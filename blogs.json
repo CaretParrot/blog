@@ -1,10 +1,8 @@
 [
     {
         "title": "Hello there!",
-        "description": "Testing out blog making"
-    },
-    {
-        "title": "Testing",
-        "description": "How does this work?"
+        "description": "Testing out blog making...",
+        "datePublished": "October 9, 2026 09:46 PM",
+        "content": "Today, I made my first blog using blog.js!"
     }
 ]

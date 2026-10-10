@@ -1,0 +1,32 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://caretparrot.github.io/blog",
+    "title": "Blog Post",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "title": {
+                "type": "string",
+                "description": "Title of the blog post."
+            },
+            "description": {
+                "type": "string",
+                "description": "A quick sentence or paragraph explaining the details of the post."
+            },
+            "datePublished": {
+                "type": "string",
+                "description": "Specifies the date that the post was last "
+            },
+            "imageURL": {
+                "type": "string",
+                "description": "The URL for the image to be displayed alongside the blog title and description"
+            },
+            "content": {
+                "type": "string",
+                "description": "The HTML content of the blog."
+            }
+        },
+        "required": ["title", "datePublished", "description"]
+    }
+}

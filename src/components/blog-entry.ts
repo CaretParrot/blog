@@ -9,6 +9,9 @@ export class BlogEntry extends LitElement {
     @property({type: String})
     description: string = "";
 
+    @property({type: Date})
+    datePublished: Date = new Date();
+
     @property({type: String})
     imageURL?: string = "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png";
 
@@ -27,15 +30,20 @@ export class BlogEntry extends LitElement {
     }
 
     imageTemplate() {
-        return html`<img style="
-            width: 100%;
-        " src="${this.imageURL || "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png"}" />`;
+        return html`<img style="width: 100%;" src="${this.imageURL}" />`;
+    }
+
+    dateTemplate() {
+        return html`
+            <time datetime="${this.datePublished}">${this.datePublished.toDateString()}</time>
+        `;
     }
     
     render() {
         return html`
             <div>
                 ${this.titleTemplate()}
+                ${this.dateTemplate()}
                 ${this.descriptionTemplate()}
             </div>
 
