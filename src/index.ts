@@ -1,5 +1,6 @@
-import { BlogEntry } from "./src/components/blog-entry";
-import { BlogDatabase } from "./src/components/blog-database";
+import { BlogEntry } from "./components/blog-entry";
+import { BlogDatabase } from "./components/blog-database";
+import blogsJSON from "./blogs.json" with {type: "json"}; 
 
 const DEFAULT_PICTURE_URL = "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png";
 
@@ -7,11 +8,6 @@ const DEFAULT_PICTURE_URL = "https://caretparrot.github.io/papaya-salad/Profile%
 
 let database: BlogDatabase = document.createElement("blog-database");
 document.body.appendChild(database);
-
-// Fetches the blogs
-
-let blogsFile = await fetch("https://caretparrot.github.io/blog/blogs.json");
-let blogsJSON = JSON.parse(await blogsFile.text());
 
 // Generates the blogs for the blog database
 
