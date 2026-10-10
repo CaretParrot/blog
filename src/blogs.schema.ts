@@ -1,7 +1,4 @@
-{
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "./blogs.schema.json",
-    "title": "Blog Post",
+export const BlogPost = {
     "type": "array",
     "items": {
         "type": "object",
@@ -29,4 +26,4 @@
         },
         "required": ["title", "datePublished", "description", "content"]
     }
-}
+};
