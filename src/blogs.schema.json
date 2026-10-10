@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://caretparrot.github.io/blog/blogs.schema.json",
+    "$id": "./blogs.schema.json",
     "title": "Blog Post",
     "type": "array",
     "items": {
@@ -27,6 +27,6 @@
                 "description": "The HTML content of the blog."
             }
         },
-        "required": ["title", "datePublished", "description"]
+        "required": ["title", "datePublished", "description", "content"]
     }
 }
