@@ -1,8 +1,17 @@
 import { BlogEntry } from "./components/blog-entry";
 import { BlogDatabase } from "./components/blog-database";
 import blogsJSON from "./blogs.json" with {type: "json"}; 
+import { BlogPost } from "./blogs.schema";
+import Ajv from "ajv";
 
 const DEFAULT_PICTURE_URL = "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png";
+const ajv = new Ajv();
+
+if (!ajv.validate(BlogPost, blogsJSON)) {
+    let errorText = `ValidationError: Blog JSON is invalid.\n${ajv.errorsText()}`;
+    document.body.innerHTML = errorText;
+    throw errorText;
+}
 
 // Creates the database to hold the blogs
 
