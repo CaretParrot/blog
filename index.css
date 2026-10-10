@@ -1,0 +1,15 @@
+blog-database {
+    background-color: var(--container);
+    padding: 0;
+}
+
+blog-entry {
+    background-color: var(--element);
+    display: grid;
+    grid: auto / 5fr 1fr;
+    margin: var(--base-unit);
+}
+
+time {
+    font-style: italic;
+}
