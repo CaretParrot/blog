@@ -13,7 +13,10 @@ export class BlogEntry extends LitElement {
     datePublished: Date = new Date();
 
     @property({type: String})
-    imageURL?: string = "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png";
+    imageURL: string = "";
+
+    @property({ type: String })
+    content: string = "";
 
     static styles = css`
         :host {
