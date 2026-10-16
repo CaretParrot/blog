@@ -2,7 +2,7 @@ import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 @customElement("blog-entry")
-export class BlogEntry extends LitElement {
+export class BlogEntryElement extends LitElement {
     @property({type: String})
     title: string = "";
     
@@ -57,6 +57,6 @@ export class BlogEntry extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "blog-entry": BlogEntry;
+        "blog-entry": BlogEntryElement;
     }
 }
