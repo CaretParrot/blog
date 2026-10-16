@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 @customElement("blog-database")
-export class BlogDatabase extends LitElement {
+export class BlogDatabaseElement extends LitElement {
     @property({type: Number})
     count: number = 0;
 
@@ -13,6 +13,6 @@ export class BlogDatabase extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "blog-database": BlogDatabase;
+        "blog-database": BlogDatabaseElement;
     }
 }

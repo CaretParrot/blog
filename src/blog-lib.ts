@@ -1,7 +1,7 @@
-import { BlogEntry } from "./components/blog-entry";
-import { BlogDatabase } from "./components/blog-database";
+import { BlogEntryElement } from "./components/blog-entry";
+import { BlogDatabaseElement } from "./components/blog-database";
 
-export type BlogType = {
+export type BlogEntry = {
     title: string;
     description: string;
     datePublished: Date;
@@ -16,8 +16,8 @@ export type BlogGenerationConfig = {
 /**
  * Creates the database for the blogs.
  */
-function createDatabase(): BlogDatabase {
-    let database: BlogDatabase = document.createElement("blog-database");
+function createDatabase(): BlogDatabaseElement {
+    let database: BlogDatabaseElement = document.createElement("blog-database");
     document.body.appendChild(database);
     return database;
 }
@@ -25,8 +25,8 @@ function createDatabase(): BlogDatabase {
 /**
  * Creates a blog entry using the JSONBlog type.
  */
-function createBlogEntry(blogsJSON: BlogType[], i: number, config?: BlogGenerationConfig): BlogEntry {
-    let newBlog: BlogEntry = document.createElement("blog-entry");
+function createBlogEntry(blogsJSON: BlogEntry[], i: number, config?: BlogGenerationConfig): BlogEntryElement {
+    let newBlog: BlogEntryElement = document.createElement("blog-entry");
     newBlog.title = blogsJSON[i]["title"];
     newBlog.description = blogsJSON[i]["description"];
     newBlog.imageURL = blogsJSON[i]["imageURL"] || config?.defaultImageURL || "";
@@ -34,7 +34,7 @@ function createBlogEntry(blogsJSON: BlogType[], i: number, config?: BlogGenerati
     return newBlog;
 }
 
-function addDefaultNavigation(database: BlogDatabase, blogs: BlogType[], i: number): void {
+function addDefaultNavigation(database: BlogDatabaseElement, blogs: BlogEntry[], i: number): void {
     // Hides the main database and creates the blog post page
 
     database.style.display = "none";
@@ -64,7 +64,7 @@ function addDefaultNavigation(database: BlogDatabase, blogs: BlogType[], i: numb
 /**
  * Fills in the blog database using the database input.
  */
-function generateBlogs(blogs: BlogType[], database: BlogDatabase, config?: BlogGenerationConfig): void {
+function generateBlogs(blogs: BlogEntry[], database: BlogDatabaseElement, config?: BlogGenerationConfig): void {
     for (let i = 0; i < blogs.length; i++) {
         let newBlog = createBlogEntry(blogs, i, config);
 
@@ -78,10 +78,40 @@ function generateBlogs(blogs: BlogType[], database: BlogDatabase, config?: BlogG
     }
 }
 
+export function validateJSON(blogs: any): BlogEntry[] {
+    try {
+        let json;
+
+        if (typeof blogs === "string") {
+            json = JSON.parse(blogs);
+        } else {
+            json = blogs;
+        }
+
+        const result: BlogEntry[] = [];
+
+        for (let i = 0; i < blogs.length; i++) {
+            result.push({
+                title: json[i].title,
+                description: json[i].description,
+                datePublished: new Date(json[i].datePublished),
+                imageURL: json[i].imageURL,
+                content: json[i].content
+            });
+        }
+
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
 /**
  * Scaffolds the blog site.
  */
-export function scaffoldBlogSite(blogs: BlogType[], config?: BlogGenerationConfig): void {
+export function scaffoldBlogSite(blogs: any, config?: BlogGenerationConfig): void {
     let database = createDatabase();
-    generateBlogs(blogs, database, config);
+    let validatedJSON: BlogEntry[] = validateJSON(blogs);
+
+    generateBlogs(validatedJSON, database, config);
 }
