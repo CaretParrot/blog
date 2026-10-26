@@ -1,18 +1,31 @@
 import { BlogEntryElement } from "./components/blog-entry";
 import { BlogDatabaseElement } from "./components/blog-database";
 import { BlogSearchElement } from "./components/blog-search";
+import Ajv, { type JSONSchemaType } from "ajv";
 
 export type BlogEntry = {
     title: string;
     description: string;
-    datePublished: Date;
+    datePublished: string;
     imageURL: string;
     content: string;
     keywords: string[];
 };
 
-export type BlogGenerationConfig = {
-    defaultImageURL?: string;
+export const BlogEntrySchema: JSONSchemaType<BlogEntry> = {
+    type: "object",
+    definitions: {
+        title: { type: "string" },
+        description: { type: "string" },
+        datePublished: { type: "string" },
+        imageURL: { type: "string" },
+        content: { type: "string" },
+        keywords: {
+            type: "array",
+            items: {type: "string"}
+        }
+    },
+    required: ["title", "description", "datePublished", "imageURL", "content", "keywords"]
 };
 
 /**
@@ -59,11 +72,11 @@ function filterBlogEntriesThatContain(blogEntries: BlogEntryElement[], query: st
 /**
  * Creates a blog entry using the JSONBlog type.
  */
-function createBlogEntry(blogsJSON: BlogEntry[], i: number, config?: BlogGenerationConfig): BlogEntryElement {
+function createBlogEntry(blogsJSON: BlogEntry[], i: number): BlogEntryElement {
     let newBlog: BlogEntryElement = document.createElement("blog-entry");
     newBlog.title = blogsJSON[i]["title"];
     newBlog.description = blogsJSON[i]["description"];
-    newBlog.imageURL = blogsJSON[i]["imageURL"] || config?.defaultImageURL || "";
+    newBlog.imageURL = blogsJSON[i]["imageURL"] || "";
     newBlog.datePublished = new Date(blogsJSON[i]["datePublished"]);
     return newBlog;
 }
@@ -98,11 +111,11 @@ function addDefaultNavigation(database: BlogDatabaseElement, blogs: BlogEntry[],
 /**
  * Fills in the blog database using the database input.
  */
-function generateBlogs(blogs: BlogEntry[], database: BlogDatabaseElement, config?: BlogGenerationConfig): BlogEntryElement[] {
+function generateBlogs(blogs: BlogEntry[], database: BlogDatabaseElement): BlogEntryElement[] {
     let blogElements: BlogEntryElement[] = [];
 
     for (let i = 0; i < blogs.length; i++) {
-        blogElements.push(createBlogEntry(blogs, i, config));
+        blogElements.push(createBlogEntry(blogs, i));
 
         // Links the blog entry to the full post
 
@@ -125,18 +138,23 @@ function generateBlogs(blogs: BlogEntry[], database: BlogDatabaseElement, config
 export function validateJSON(blogs: any): BlogEntry[] {
     try {
         const json = (typeof blogs === "string") ? JSON.parse(blogs) : blogs;
-
         const result: BlogEntry[] = [];
+        const ajv = new Ajv();
+        const validate = ajv.compile(BlogEntrySchema);
 
         for (let i = 0; i < blogs.length; i++) {
+            if (!validate(json[i])) {
+                throw validate.errors;
+            }
+
             result.push({
                 title: json[i].title,
                 description: json[i].description,
-                datePublished: new Date(json[i].datePublished),
+                datePublished: json[i].datePublished,
                 imageURL: json[i].imageURL,
                 content: json[i].content,
                 keywords: json[i].keywords
-            });
+            } as BlogEntry);
         }
 
         return result;
@@ -148,11 +166,11 @@ export function validateJSON(blogs: any): BlogEntry[] {
 /**
  * Scaffolds the blog site.
  */
-export function scaffoldBlogSite(blogs: any, config?: BlogGenerationConfig): void {
+export function scaffoldBlogSite(blogs: any): void {
     let database = createDatabase();
     let searchBar = createSearch(database);
     let validatedJSON: BlogEntry[] = validateJSON(blogs);
 
-    let blogElements = generateBlogs(validatedJSON, database, config);
+    let blogElements = generateBlogs(validatedJSON, database);
     addSearchListener(searchBar, blogElements);
 }
