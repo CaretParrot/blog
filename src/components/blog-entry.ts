@@ -15,8 +15,11 @@ export class BlogEntryElement extends LitElement {
     @property({type: String})
     imageURL: string = "";
 
-    @property({ type: String })
+    @property({type: String})
     content: string = "";
+
+    @property({ type: String })
+    keywords: string = "";
 
     static styles = css`
         :host {
@@ -38,7 +41,7 @@ export class BlogEntryElement extends LitElement {
 
     dateTemplate() {
         return html`
-            <time datetime="${this.datePublished}">${this.datePublished.toDateString()}</time>
+            <time style="font-style: italic;" datetime="${this.datePublished}">${this.datePublished.toDateString()}</time>
         `;
     }
     

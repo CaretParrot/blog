@@ -4,6 +4,10 @@
         "description": "Testing out blog making in blog.js!",
         "datePublished": "October 15, 2026",
         "imageURL": "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png",
-        "content": "This is my first blog using blog.js!"
+        "content": "This is my first blog using blog.js!",
+        "keywords": [
+            "blogmaking",
+            "firstblog"
+        ]
     }
 ]

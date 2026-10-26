@@ -1,5 +1,6 @@
 import { BlogEntryElement } from "./components/blog-entry";
 import { BlogDatabaseElement } from "./components/blog-database";
+import { BlogSearchElement } from "./components/blog-search";
 
 export type BlogEntry = {
     title: string;
@@ -7,6 +8,7 @@ export type BlogEntry = {
     datePublished: Date;
     imageURL: string;
     content: string;
+    keywords: string[];
 };
 
 export type BlogGenerationConfig = {
@@ -17,9 +19,41 @@ export type BlogGenerationConfig = {
  * Creates the database for the blogs.
  */
 function createDatabase(): BlogDatabaseElement {
-    let database: BlogDatabaseElement = document.createElement("blog-database");
+    let database = document.createElement("blog-database");
     document.body.appendChild(database);
+
     return database;
+}
+
+function createSearch(database: BlogDatabaseElement): BlogSearchElement {
+    let searchBar = document.createElement("blog-search");
+    database.appendChild(searchBar);
+    return searchBar;
+}
+
+function addSearchListener(blogSearch: BlogSearchElement, blogEntries: BlogEntryElement[]) {
+    blogSearch.resultsCount = filterBlogEntriesThatContain(blogEntries, blogSearch.query);
+
+    blogSearch.oninput = () => {
+        blogSearch.resultsCount = filterBlogEntriesThatContain(blogEntries, blogSearch.query);
+    }
+}
+
+function filterBlogEntriesThatContain(blogEntries: BlogEntryElement[], query: string): number {
+    let filteredResultsCount = 0;
+
+    for (let i = 0; i < blogEntries.length; i++) {
+        if (blogEntries[i].title.includes(query) ||
+            blogEntries[i].datePublished.toString().includes(query) ||
+            blogEntries[i].description.includes(query)) {
+            blogEntries[i].style.display = "grid";
+            filteredResultsCount++;
+        } else {
+            blogEntries[i].style.display = "none";
+        }
+    }
+
+    return filteredResultsCount;
 }
 
 /**
@@ -64,29 +98,33 @@ function addDefaultNavigation(database: BlogDatabaseElement, blogs: BlogEntry[],
 /**
  * Fills in the blog database using the database input.
  */
-function generateBlogs(blogs: BlogEntry[], database: BlogDatabaseElement, config?: BlogGenerationConfig): void {
+function generateBlogs(blogs: BlogEntry[], database: BlogDatabaseElement, config?: BlogGenerationConfig): BlogEntryElement[] {
+    let blogElements: BlogEntryElement[] = [];
+
     for (let i = 0; i < blogs.length; i++) {
-        let newBlog = createBlogEntry(blogs, i, config);
+        blogElements.push(createBlogEntry(blogs, i, config));
 
         // Links the blog entry to the full post
 
-        newBlog.onclick = () => {
+        blogElements[i].onclick = () => {
             addDefaultNavigation(database, blogs, i);
         }
 
-        database.appendChild(newBlog);
+        database.count++;
     }
+
+    blogElements.sort((a, b) => b.datePublished.getTime() - a.datePublished.getTime());
+    
+    for (let i = 0; i < blogElements.length; i++) {
+        database.appendChild(blogElements[i]);
+    }
+
+    return blogElements;
 }
 
 export function validateJSON(blogs: any): BlogEntry[] {
     try {
-        let json;
-
-        if (typeof blogs === "string") {
-            json = JSON.parse(blogs);
-        } else {
-            json = blogs;
-        }
+        const json = (typeof blogs === "string") ? JSON.parse(blogs) : blogs;
 
         const result: BlogEntry[] = [];
 
@@ -96,7 +134,8 @@ export function validateJSON(blogs: any): BlogEntry[] {
                 description: json[i].description,
                 datePublished: new Date(json[i].datePublished),
                 imageURL: json[i].imageURL,
-                content: json[i].content
+                content: json[i].content,
+                keywords: json[i].keywords
             });
         }
 
@@ -111,7 +150,9 @@ export function validateJSON(blogs: any): BlogEntry[] {
  */
 export function scaffoldBlogSite(blogs: any, config?: BlogGenerationConfig): void {
     let database = createDatabase();
+    let searchBar = createSearch(database);
     let validatedJSON: BlogEntry[] = validateJSON(blogs);
 
-    generateBlogs(validatedJSON, database, config);
+    let blogElements = generateBlogs(validatedJSON, database, config);
+    addSearchListener(searchBar, blogElements);
 }
