@@ -4,12 +4,14 @@ blog-database {
 }
 
 blog-entry {
-    background-color: var(--element);
     display: grid;
     grid: auto / 5fr 1fr;
+    padding: var(--base-unit);
     margin: var(--base-unit);
 }
 
-time {
-    font-style: italic;
+blog-search {
+    display: block;
+    padding: var(--base-unit);
+    margin: var(--base-unit);
 }

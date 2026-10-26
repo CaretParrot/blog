@@ -7,7 +7,10 @@ export class BlogDatabaseElement extends LitElement {
     count: number = 0;
 
     render() {
-        return html`<div><slot></slot></div>`;
+        return html`
+            <slot></slot>
+            <slot></slot>
+        `;
     }
 }
 
