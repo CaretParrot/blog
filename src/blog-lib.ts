@@ -48,6 +48,7 @@ function createDatabase(): BlogDatabaseElement {
 function createSearch(database: BlogDatabaseElement): BlogSearchElement {
     let searchBar = document.createElement("blog-search");
     database.appendChild(searchBar);
+
     return searchBar;
 }
 
@@ -65,6 +66,17 @@ function addSearchListener(
             new Date(blogSearch.endDate)
         );
     });
+
+    blogSearch.onkeydown = function (event) {
+        if (event.key === "Enter") {
+            blogSearch.resultsCount = applyFilters(
+                blogEntries,
+                blogSearch.query,
+                new Date(blogSearch.startDate),
+                new Date(blogSearch.endDate)
+            );
+        }
+    }
 }
 
 function applyFilters(
@@ -140,7 +152,7 @@ function createBlogEntry(blogsJSON: BlogEntry[], i: number): BlogEntryElement {
     return newBlog;
 }
 
-function addDefaultNavigation(
+function defaultNavigation(
     database: BlogDatabaseElement,
     blogs: BlogEntry[],
     i: number
@@ -181,15 +193,15 @@ function generateBlogs(
     let blogElements: BlogEntryElement[] = [];
 
     for (let i = 0; i < blogs.length; i++) {
+        // Creates a blog entry and adds it to the list
+
         blogElements.push(createBlogEntry(blogs, i));
 
         // Links the blog entry to the full post
 
         blogElements[i].onclick = () => {
-            addDefaultNavigation(database, blogs, i);
+            defaultNavigation(database, blogs, i);
         };
-
-        database.count++;
     }
 
     blogElements.sort(
@@ -199,6 +211,8 @@ function generateBlogs(
     for (let i = 0; i < blogElements.length; i++) {
         database.appendChild(blogElements[i]);
     }
+
+    database.entryCount = blogs.length;
 
     return blogElements;
 }
