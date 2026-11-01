@@ -67,21 +67,26 @@ function addSearchListener(
     });
 }
 
-function applyFilters(blogEntries: BlogEntryElement[], query: string, startDate: Date, endDate: Date): number {
+function applyFilters(
+    blogEntries: BlogEntryElement[],
+    query: string,
+    startDate: Date,
+    endDate: Date
+): number {
     let finalResultsCount = 0;
     finalResultsCount = searchQuery(blogEntries, query);
 
-    if (startDate.toString() !== "Invalid Date" && endDate.toString() !== "Invalid Date") {
+    if (
+        startDate.toString() !== "Invalid Date" &&
+        endDate.toString() !== "Invalid Date"
+    ) {
         finalResultsCount = dateRangeQuery(blogEntries, startDate, endDate);
     }
 
     return finalResultsCount;
 }
 
-function searchQuery(
-    blogEntries: BlogEntryElement[],
-    query: string
-): number {
+function searchQuery(blogEntries: BlogEntryElement[], query: string): number {
     let filteredResultsCount = 0;
 
     for (let i = 0; i < blogEntries.length; i++) {
@@ -100,18 +105,26 @@ function searchQuery(
     return filteredResultsCount;
 }
 
-function dateRangeQuery(blogEntries: BlogEntryElement[], startDate: Date, endDate: Date): number {
+function dateRangeQuery(
+    blogEntries: BlogEntryElement[],
+    startDate: Date,
+    endDate: Date
+): number {
     let filteredResultsCount = 0;
 
     for (let i = 0; i < blogEntries.length; i++) {
-        if (blogEntries[i].datePublished >= startDate && blogEntries[i].datePublished <= endDate && blogEntries[i].style.display !== "none") {
+        if (
+            blogEntries[i].datePublished >= startDate &&
+            blogEntries[i].datePublished <= endDate &&
+            blogEntries[i].style.display !== "none"
+        ) {
             blogEntries[i].style.display = "grid";
             filteredResultsCount++;
         } else {
             blogEntries[i].style.display = "none";
         }
     }
-    
+
     return filteredResultsCount;
 }
 
