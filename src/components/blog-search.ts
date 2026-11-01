@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property} from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 
 @customElement("blog-search")
 export class BlogSearchElement extends LitElement {
@@ -19,7 +19,8 @@ export class BlogSearchElement extends LitElement {
         input:focus,
         button:hover,
         input:hover {
-            box-shadow: 0 0 calc(var(--base-unit) / 2) calc(var(--base-unit) / 2) oklch(0 0 0 / 50%);
+            box-shadow: 0 0 calc(var(--base-unit) / 2)
+                calc(var(--base-unit) / 2) oklch(0 0 0 / 50%);
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -33,7 +34,8 @@ export class BlogSearchElement extends LitElement {
             background-color: var(--text);
         }
 
-        input, button {
+        input,
+        button {
             border: calc(var(--base-unit) / 4) solid hsla(0, 0%, 0%, 1);
             border-radius: var(--base-unit);
             padding: var(--base-unit);
@@ -58,10 +60,18 @@ export class BlogSearchElement extends LitElement {
 
     dateRangeTemplate() {
         return html`
-            <input type="date" name="start" @input="${(event: { target: HTMLInputElement }) =>
-                    (this.startDate = event.target.value)}">&lt;-&gt;
-            <input type="date" name="end" @input="${(event: { target: HTMLInputElement }) =>
-                    (this.endDate = event.target.value)}">
+            <input
+                type="date"
+                name="start"
+                @input="${(event: { target: HTMLInputElement }) =>
+                    (this.startDate = event.target.value)}"
+            />&lt;-&gt;
+            <input
+                type="date"
+                name="end"
+                @input="${(event: { target: HTMLInputElement }) =>
+                    (this.endDate = event.target.value)}"
+            />
         `;
     }
 
@@ -74,11 +84,9 @@ export class BlogSearchElement extends LitElement {
     }
 
     render() {
-        return html` 
-            ${this.inputTemplate()} 
-            ${this.dateRangeTemplate()}
-            ${this.filterButtonTemplate()}
-            ${this.resultsCountTemplate()}
+        return html`
+            ${this.inputTemplate()} ${this.dateRangeTemplate()}
+            ${this.filterButtonTemplate()} ${this.resultsCountTemplate()}
         `;
     }
 
@@ -86,7 +94,7 @@ export class BlogSearchElement extends LitElement {
         this.dispatchEvent(
             new CustomEvent("filterentries", {
                 bubbles: true,
-                composed: true
+                composed: true,
             })
         );
     }
