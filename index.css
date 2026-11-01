@@ -14,9 +14,9 @@ blog-entry {
 }
 
 blog-search {
-    display: grid;
+    display: flex;
     padding: 0;
     margin: var(--base-unit);
     background-color: var(--container);
-    grid: auto / auto auto auto auto auto auto;
+    flex-flow: row wrap;
 }

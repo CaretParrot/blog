@@ -19,7 +19,7 @@ export class BlogEntryElement extends LitElement {
     content: string = "";
 
     @property({ type: String })
-    keywords: string = "";
+    keywords?: string = "";
 
     titleTemplate() {
         return html`<h1>${this.title}</h1>`;

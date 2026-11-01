@@ -9,11 +9,17 @@ export class BlogSearchElement extends LitElement {
     @property({ type: Number })
     resultsCount: Number = 0;
 
-    @property({ type: String })
-    startDate: string = "";
+    @property({ type: Date })
+    startDate: Date = new Date("");
+
+    @property({ type: Date })
+    endDate: Date = new Date("");
 
     @property({ type: String })
-    endDate: string = "";
+    minDate: string = "";
+
+    @property({ type: String })
+    maxDate: string = "";
 
     static styles = css`
         input:focus,
@@ -35,7 +41,8 @@ export class BlogSearchElement extends LitElement {
         }
 
         input,
-        button {
+        button,
+        label {
             border: calc(var(--base-unit) / 4) solid hsla(0, 0%, 0%, 1);
             border-radius: var(--base-unit);
             padding: var(--base-unit);
@@ -63,14 +70,20 @@ export class BlogSearchElement extends LitElement {
             <input
                 type="date"
                 name="start"
+                min="${this.minDate}"
+                max="${this.maxDate}"
+                value="${this.minDate}"
                 @input="${(event: { target: HTMLInputElement }) =>
-                    (this.startDate = event.target.value)}"
+                    (this.startDate = new Date(event.target.value))}"
             />&lt;-&gt;
             <input
                 type="date"
                 name="end"
+                min="${this.minDate}"
+                max="${this.maxDate}"
+                value="${this.maxDate}"
                 @input="${(event: { target: HTMLInputElement }) =>
-                    (this.endDate = event.target.value)}"
+                    (this.endDate = new Date(event.target.value))}"
             />
         `;
     }
