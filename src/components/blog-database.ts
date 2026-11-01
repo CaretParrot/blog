@@ -1,9 +1,9 @@
-import { LitElement, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { LitElement, html, css } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
 @customElement("blog-database")
 export class BlogDatabaseElement extends LitElement {
-    @property({type: Number})
+    @property({ type: Number })
     count: number = 0;
 
     render() {

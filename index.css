@@ -1,5 +1,7 @@
 blog-database {
-    background-color: var(--container);
+    background-color: transparent;
+    margin: 0;
+    border: none;
     padding: 0;
 }
 
@@ -8,10 +10,13 @@ blog-entry {
     grid: auto / 5fr 1fr;
     padding: var(--base-unit);
     margin: var(--base-unit);
+    cursor: pointer;
 }
 
 blog-search {
-    display: block;
-    padding: var(--base-unit);
+    display: grid;
+    padding: 0;
     margin: var(--base-unit);
+    background-color: var(--container);
+    grid: auto / auto auto auto auto auto auto;
 }

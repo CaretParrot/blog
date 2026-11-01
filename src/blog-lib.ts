@@ -22,10 +22,17 @@ export const BlogEntrySchema: JSONSchemaType<BlogEntry> = {
         content: { type: "string" },
         keywords: {
             type: "array",
-            items: {type: "string"}
-        }
+            items: { type: "string" },
+        },
     },
-    required: ["title", "description", "datePublished", "imageURL", "content", "keywords"]
+    required: [
+        "title",
+        "description",
+        "datePublished",
+        "imageURL",
+        "content",
+        "keywords",
+    ],
 };
 
 /**
@@ -44,21 +51,45 @@ function createSearch(database: BlogDatabaseElement): BlogSearchElement {
     return searchBar;
 }
 
-function addSearchListener(blogSearch: BlogSearchElement, blogEntries: BlogEntryElement[]) {
-    blogSearch.resultsCount = filterBlogEntriesThatContain(blogEntries, blogSearch.query);
+function addSearchListener(
+    blogSearch: BlogSearchElement,
+    blogEntries: BlogEntryElement[]
+) {
+    blogSearch.resultsCount = blogEntries.length;
 
-    blogSearch.oninput = () => {
-        blogSearch.resultsCount = filterBlogEntriesThatContain(blogEntries, blogSearch.query);
-    }
+    blogSearch.addEventListener("filterentries", () => {
+        blogSearch.resultsCount = applyFilters(
+            blogEntries,
+            blogSearch.query,
+            new Date(blogSearch.startDate),
+            new Date(blogSearch.endDate)
+        );
+    });
 }
 
-function filterBlogEntriesThatContain(blogEntries: BlogEntryElement[], query: string): number {
+function applyFilters(blogEntries: BlogEntryElement[], query: string, startDate: Date, endDate: Date): number {
+    let finalResultsCount = 0;
+    finalResultsCount = searchQuery(blogEntries, query);
+
+    if (startDate.toString() !== "Invalid Date" && endDate.toString() !== "Invalid Date") {
+        finalResultsCount = dateRangeQuery(blogEntries, startDate, endDate);
+    }
+
+    return finalResultsCount;
+}
+
+function searchQuery(
+    blogEntries: BlogEntryElement[],
+    query: string
+): number {
     let filteredResultsCount = 0;
 
     for (let i = 0; i < blogEntries.length; i++) {
-        if (blogEntries[i].title.includes(query) ||
-            blogEntries[i].datePublished.toString().includes(query) ||
-            blogEntries[i].description.includes(query)) {
+        console.log(blogEntries[i].title.includes(query));
+        if (
+            blogEntries[i].title.includes(query) ||
+            blogEntries[i].description.includes(query)
+        ) {
             blogEntries[i].style.display = "grid";
             filteredResultsCount++;
         } else {
@@ -66,6 +97,21 @@ function filterBlogEntriesThatContain(blogEntries: BlogEntryElement[], query: st
         }
     }
 
+    return filteredResultsCount;
+}
+
+function dateRangeQuery(blogEntries: BlogEntryElement[], startDate: Date, endDate: Date): number {
+    let filteredResultsCount = 0;
+
+    for (let i = 0; i < blogEntries.length; i++) {
+        if (blogEntries[i].datePublished >= startDate && blogEntries[i].datePublished <= endDate && blogEntries[i].style.display !== "none") {
+            blogEntries[i].style.display = "grid";
+            filteredResultsCount++;
+        } else {
+            blogEntries[i].style.display = "none";
+        }
+    }
+    
     return filteredResultsCount;
 }
 
@@ -81,12 +127,16 @@ function createBlogEntry(blogsJSON: BlogEntry[], i: number): BlogEntryElement {
     return newBlog;
 }
 
-function addDefaultNavigation(database: BlogDatabaseElement, blogs: BlogEntry[], i: number): void {
+function addDefaultNavigation(
+    database: BlogDatabaseElement,
+    blogs: BlogEntry[],
+    i: number
+): void {
     // Hides the main database and creates the blog post page
 
     database.style.display = "none";
     let backButton: HTMLButtonElement = document.createElement("button");
-    let blogPost: HTMLDivElement = document.createElement("div"); 
+    let blogPost: HTMLDivElement = document.createElement("div");
 
     // Fills in the blog content
 
@@ -100,10 +150,10 @@ function addDefaultNavigation(database: BlogDatabaseElement, blogs: BlogEntry[],
         backButton.remove();
         blogPost.remove();
         database.style.display = "block";
-    }
+    };
 
     // Adds the elements to the DOM
-    
+
     document.body.appendChild(backButton);
     document.body.appendChild(blogPost);
 }
@@ -111,7 +161,10 @@ function addDefaultNavigation(database: BlogDatabaseElement, blogs: BlogEntry[],
 /**
  * Fills in the blog database using the database input.
  */
-function generateBlogs(blogs: BlogEntry[], database: BlogDatabaseElement): BlogEntryElement[] {
+function generateBlogs(
+    blogs: BlogEntry[],
+    database: BlogDatabaseElement
+): BlogEntryElement[] {
     let blogElements: BlogEntryElement[] = [];
 
     for (let i = 0; i < blogs.length; i++) {
@@ -121,13 +174,15 @@ function generateBlogs(blogs: BlogEntry[], database: BlogDatabaseElement): BlogE
 
         blogElements[i].onclick = () => {
             addDefaultNavigation(database, blogs, i);
-        }
+        };
 
         database.count++;
     }
 
-    blogElements.sort((a, b) => b.datePublished.getTime() - a.datePublished.getTime());
-    
+    blogElements.sort(
+        (a, b) => b.datePublished.getTime() - a.datePublished.getTime()
+    );
+
     for (let i = 0; i < blogElements.length; i++) {
         database.appendChild(blogElements[i]);
     }
@@ -137,7 +192,7 @@ function generateBlogs(blogs: BlogEntry[], database: BlogDatabaseElement): BlogE
 
 export function validateJSON(blogs: any): BlogEntry[] {
     try {
-        const json = (typeof blogs === "string") ? JSON.parse(blogs) : blogs;
+        const json = typeof blogs === "string" ? JSON.parse(blogs) : blogs;
         const result: BlogEntry[] = [];
         const ajv = new Ajv();
         const validate = ajv.compile(BlogEntrySchema);
@@ -153,7 +208,7 @@ export function validateJSON(blogs: any): BlogEntry[] {
                 datePublished: json[i].datePublished,
                 imageURL: json[i].imageURL,
                 content: json[i].content,
-                keywords: json[i].keywords
+                keywords: json[i].keywords,
             } as BlogEntry);
         }
 
