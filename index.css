@@ -5,6 +5,10 @@ blog-database {
     padding: 0;
 }
 
+body {
+    padding: 0;
+}
+
 blog-entry {
     display: grid;
     grid: auto / 5fr 1fr;
@@ -14,7 +18,7 @@ blog-entry {
 }
 
 blog-search {
-    display: flex;
+    display: block;
     padding: 0;
     margin: var(--base-unit);
     background-color: var(--container);

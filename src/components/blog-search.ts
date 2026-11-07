@@ -40,6 +40,15 @@ export class BlogSearchElement extends LitElement {
             background-color: var(--text);
         }
 
+        form {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            flex-flow: row wrap;
+            justify-content: center;
+        }
+
         input,
         button,
         label {
@@ -50,8 +59,17 @@ export class BlogSearchElement extends LitElement {
             background-color: var(--element);
         }
 
-        button {
+        input[type="submit"] {
             cursor: pointer;
+        }
+
+        #arrows {
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            display: flex;
         }
     `;
 
@@ -59,6 +77,7 @@ export class BlogSearchElement extends LitElement {
         return html`
             <input
                 type="text"
+                name="query"
                 @input="${(event: { target: HTMLInputElement }) =>
                     (this.query = event.target.value)}"
             />
@@ -75,7 +94,7 @@ export class BlogSearchElement extends LitElement {
                 value="${this.minDate}"
                 @input="${(event: { target: HTMLInputElement }) =>
                     (this.startDate = new Date(event.target.value))}"
-            />&lt;-&gt;
+            /><label id="arrows">&lt;-&gt;</label>
             <input
                 type="date"
                 name="end"
@@ -93,13 +112,18 @@ export class BlogSearchElement extends LitElement {
     }
 
     filterButtonTemplate() {
-        return html`<button @click="${this.filterEntries}">Filter</button>`;
+        return html`<input value="Filter" type="submit"/>`;
     }
 
     render() {
         return html`
-            ${this.inputTemplate()} ${this.dateRangeTemplate()}
-            ${this.filterButtonTemplate()} ${this.resultsCountTemplate()}
+            <form action="/" @submit="${(event: Event) => {
+                event.preventDefault();
+                this.filterEntries();
+        }}">
+                ${this.inputTemplate()} ${this.dateRangeTemplate()}
+                ${this.filterButtonTemplate()} ${this.resultsCountTemplate()}
+            </form>
         `;
     }
 

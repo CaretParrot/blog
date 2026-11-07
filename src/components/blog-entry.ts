@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 @customElement("blog-entry")
@@ -21,6 +21,20 @@ export class BlogEntryElement extends LitElement {
     @property({ type: String })
     keywords?: string = "";
 
+    static styles = css`
+        h1 {
+            line-height: 1.5;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        time {
+            font-style: italic;
+        }
+    `;
+
     titleTemplate() {
         return html`<h1>${this.title}</h1>`;
     }
@@ -30,14 +44,12 @@ export class BlogEntryElement extends LitElement {
     }
 
     imageTemplate() {
-        return html`<img style="width: 100%;" src="${this.imageURL}" />`;
+        return html`<img src="${this.imageURL}" />`;
     }
 
     dateTemplate() {
         return html`
-            <time style="font-style: italic;" datetime="${this.datePublished}"
-                >${this.datePublished.toDateString()}</time
-            >
+            <time datetime="${this.datePublished}">${this.datePublished.toDateString()}</time>
         `;
     }
 
