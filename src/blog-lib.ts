@@ -181,7 +181,7 @@ function defaultNavigation(
     backButton.onclick = () => {
         backButton.remove();
         blogPost.remove();
-        database.style.display = "block";
+        database.style.display = "grid";
     };
 
     // Adds the elements to the DOM

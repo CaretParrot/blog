@@ -3,24 +3,25 @@ blog-database {
     margin: 0;
     border: none;
     padding: 0;
-}
-
-body {
-    padding: 0;
+    display: grid;
+    grid: auto / auto;
+    gap: var(--base-unit);
 }
 
 blog-entry {
     display: grid;
     grid: auto / 5fr 1fr;
-    padding: var(--base-unit);
-    margin: var(--base-unit);
     cursor: pointer;
 }
 
 blog-search {
     display: block;
-    padding: 0;
-    margin: var(--base-unit);
     background-color: var(--container);
     flex-flow: row wrap;
+    padding: 0;
+}
+
+slot {
+    margin: 0;
+    padding: 0;
 }
