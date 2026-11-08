@@ -4,7 +4,7 @@ import { customElement, property } from "lit/decorators.js";
 @customElement("blog-database")
 export class BlogDatabaseElement extends LitElement {
     @property({ type: Number })
-    count: number = 0;
+    entryCount: number = 0;
 
     render() {
         return html`
