@@ -16,10 +16,10 @@ export class BlogSearchElement extends LitElement {
     endDate: Date = new Date("");
 
     @property({ type: String })
-    minDate: string = "";
+    minDate: Date = new Date("");
 
     @property({ type: String })
-    maxDate: string = "";
+    maxDate: Date = new Date("");
 
     static styles = css`
         input:focus,
@@ -89,18 +89,18 @@ export class BlogSearchElement extends LitElement {
             <input
                 type="date"
                 name="start"
-                min="${this.minDate}"
-                max="${this.maxDate}"
-                value="${this.minDate}"
+                min="${this.minDate.toLocaleDateString("en-CA")}"
+                max="${this.maxDate.toLocaleDateString("en-CA")}"
+                value="${this.minDate.toLocaleDateString("en-CA")}"
                 @input="${(event: { target: HTMLInputElement }) =>
                     (this.startDate = new Date(event.target.value))}"
             /><label id="arrows">&lt;-&gt;</label>
             <input
                 type="date"
                 name="end"
-                min="${this.minDate}"
-                max="${this.maxDate}"
-                value="${this.maxDate}"
+                min="${this.minDate.toLocaleDateString("en-CA")}"
+                max="${this.maxDate.toLocaleDateString("en-CA")}"
+                value="${this.maxDate.toLocaleDateString("en-CA")}"
                 @input="${(event: { target: HTMLInputElement }) =>
                     (this.endDate = new Date(event.target.value))}"
             />
@@ -112,15 +112,18 @@ export class BlogSearchElement extends LitElement {
     }
 
     filterButtonTemplate() {
-        return html`<input value="Filter" type="submit"/>`;
+        return html`<input value="Filter" type="submit" />`;
     }
 
     render() {
         return html`
-            <form action="/" @submit="${(event: Event) => {
-                event.preventDefault();
-                this.filterEntries();
-        }}">
+            <form
+                action="/"
+                @submit="${(event: Event) => {
+                    event.preventDefault();
+                    this.filterEntries();
+                }}"
+            >
                 ${this.inputTemplate()} ${this.dateRangeTemplate()}
                 ${this.filterButtonTemplate()} ${this.resultsCountTemplate()}
             </form>

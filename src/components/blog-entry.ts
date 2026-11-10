@@ -21,6 +21,9 @@ export class BlogEntryElement extends LitElement {
     @property({ type: String })
     keywords?: string = "";
 
+    @property({ type: String })
+    tags?: string = "";
+
     static styles = css`
         h1 {
             line-height: 1.5;
@@ -49,7 +52,9 @@ export class BlogEntryElement extends LitElement {
 
     dateTemplate() {
         return html`
-            <time datetime="${this.datePublished}">${this.datePublished.toDateString()}</time>
+            <time datetime="${this.datePublished}"
+                >${this.datePublished.toDateString()}</time
+            >
         `;
     }
 
