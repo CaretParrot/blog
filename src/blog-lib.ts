@@ -1,42 +1,43 @@
 import { BlogEntryElement } from "./components/blog-entry";
 import { BlogDatabaseElement } from "./components/blog-database";
 import { BlogSearchElement } from "./components/blog-search";
+import * as blogsSchema from "../blogs.schema.json" with { type: "json" };
 import Ajv, { type JSONSchemaType } from "ajv";
 
+/**
+ * Defines the type to check input JSON files against.
+ */
+export type BlogEntryArray = BlogEntry[];
+
+/**
+ * Shape of each blog entry object.
+ */
 export type BlogEntry = {
     title: string;
     description: string;
     datePublished: string;
     imageURL: string;
     content: string;
-    keywords: string[];
-};
-
-export const BlogEntrySchema: JSONSchemaType<BlogEntry> = {
-    type: "object",
-    definitions: {
-        title: { type: "string" },
-        description: { type: "string" },
-        datePublished: { type: "string" },
-        imageURL: { type: "string" },
-        content: { type: "string" },
-        keywords: {
-            type: "array",
-            items: { type: "string" },
-        },
-    },
-    required: [
-        "title",
-        "description",
-        "datePublished",
-        "imageURL",
-        "content",
-        "keywords",
-    ],
+    keywords?: string[];
+    tags?: string[];
 };
 
 /**
+ * Transforms the input schema input a format for Ajv.
+ */
+
+let ajvSchema: JSONSchemaType<BlogEntryArray> = JSON.parse(
+    JSON.stringify(blogsSchema)
+);
+delete ajvSchema.$schema;
+
+const ajv = new Ajv();
+const validate = ajv.compile<BlogEntryArray>(ajvSchema);
+
+/**
  * Creates the database for the blogs.
+ *
+ * @returns
  */
 function createDatabase(): BlogDatabaseElement {
     let database = document.createElement("blog-database");
@@ -45,6 +46,12 @@ function createDatabase(): BlogDatabaseElement {
     return database;
 }
 
+/**
+ * Creates a search bar and inserts it into the database.
+ *
+ * @param database
+ * @returns
+ */
 function createSearch(database: BlogDatabaseElement): BlogSearchElement {
     let searchBar = document.createElement("blog-search");
     database.appendChild(searchBar);
@@ -52,6 +59,13 @@ function createSearch(database: BlogDatabaseElement): BlogSearchElement {
     return searchBar;
 }
 
+/**
+ * Adds an event listener to a search bar to filter for blog entries.
+ * Sets up the search range limit for the blog search entries.
+ *
+ * @param blogSearch
+ * @param blogEntries
+ */
 function addSearchListener(
     blogSearch: BlogSearchElement,
     blogEntries: BlogEntryElement[]
@@ -62,17 +76,21 @@ function addSearchListener(
         blogSearch.resultsCount = applyFilters(blogEntries, blogSearch);
     });
 
-    blogSearch.onkeydown = function (event) {
-        if (event.key === "Enter") {
-            blogSearch.resultsCount = applyFilters(blogEntries, blogSearch);
-        }
-    };
-
-    blogSearch.minDate =
-        blogEntries[0].datePublished.toLocaleDateString("en-CA");
-    blogSearch.maxDate = new Date().toLocaleDateString("en-CA");
+    blogSearch.minDate = blogEntries[0].datePublished;
+    blogSearch.maxDate = new Date();
+    blogSearch.startDate = blogSearch.minDate;
+    blogSearch.endDate = blogSearch.maxDate;
 }
 
+/**
+ * Applies all filters to the blog entries.
+ * This includes a string match and a date range match.
+ * Date range match will not run if either date is invalid.
+ *
+ * @param blogEntries
+ * @param blogSearch
+ * @returns
+ */
 function applyFilters(
     blogEntries: BlogEntryElement[],
     blogSearch: BlogSearchElement
@@ -80,20 +98,23 @@ function applyFilters(
     let finalResultsCount = 0;
     finalResultsCount = searchQuery(blogEntries, blogSearch.query);
 
-    if (
-        blogSearch.startDate.toString() !== "Invalid Date" &&
-        blogSearch.endDate.toString() !== "Invalid Date"
-    ) {
-        finalResultsCount = dateRangeQuery(
-            blogEntries,
-            blogSearch.startDate,
-            blogSearch.endDate
-        );
-    }
+    finalResultsCount = dateRangeQuery(
+        blogEntries,
+        blogSearch.startDate,
+        blogSearch.endDate
+    );
 
     return finalResultsCount;
 }
 
+/**
+ * Loops through all blog entries, showing only ones that match the search query.
+ *
+ * @param blogEntries
+ * @param query
+ * @param caseSensitive
+ * @returns
+ */
 function searchQuery(
     blogEntries: BlogEntryElement[],
     query: string,
@@ -124,6 +145,15 @@ function searchQuery(
     return filteredResultsCount;
 }
 
+/**
+ * Loops through all blog entries, showing only the ones that fall within the date range.
+ * Stacks upon previous filters.
+ *
+ * @param blogEntries
+ * @param startDate
+ * @param endDate
+ * @returns
+ */
 function dateRangeQuery(
     blogEntries: BlogEntryElement[],
     startDate: Date,
@@ -148,7 +178,13 @@ function dateRangeQuery(
 }
 
 /**
- * Creates a blog entry using the JSONBlog type.
+ *
+ * Creates a blog entry element.
+ * Function does not append elements to the DOM, since all entries are sorted after creation.
+ *
+ * @param blogsJSON
+ * @param i
+ * @returns
  */
 function createBlogEntry(blogsJSON: BlogEntry[], i: number): BlogEntryElement {
     let newBlog: BlogEntryElement = document.createElement("blog-entry");
@@ -159,6 +195,14 @@ function createBlogEntry(blogsJSON: BlogEntry[], i: number): BlogEntryElement {
     return newBlog;
 }
 
+/**
+ * Creates the default button interaction for each blog post.
+ * Blog entries generate content page on click, then deletes the elements when the page is exited.
+ *
+ * @param database
+ * @param blogs
+ * @param i
+ */
 function defaultNavigation(
     database: BlogDatabaseElement,
     blogs: BlogEntry[],
@@ -191,7 +235,13 @@ function defaultNavigation(
 }
 
 /**
- * Fills in the blog database using the database input.
+ *
+ * Adds all blog entries to the document.
+ * Blogs are automatically sorted by date published.
+ *
+ * @param blogs
+ * @param database
+ * @returns
  */
 function generateBlogs(
     blogs: BlogEntry[],
@@ -224,36 +274,26 @@ function generateBlogs(
     return blogElements;
 }
 
+/**
+ * Validates the JSON input.
+ * If the input is invalid, throws and error and stops rendering the page.
+ * Otherwise, returns an array of blog entries.
+ *
+ * @param blogs
+ * @returns
+ */
 export function validateJSON(blogs: any): BlogEntry[] {
-    try {
-        const json = typeof blogs === "string" ? JSON.parse(blogs) : blogs;
-        const result: BlogEntry[] = [];
-        const ajv = new Ajv();
-        const validate = ajv.compile(BlogEntrySchema);
+    const json = typeof blogs === "string" ? JSON.parse(blogs) : blogs;
 
-        for (let i = 0; i < blogs.length; i++) {
-            if (!validate(json[i])) {
-                throw validate.errors;
-            }
-
-            result.push({
-                title: json[i].title,
-                description: json[i].description,
-                datePublished: json[i].datePublished,
-                imageURL: json[i].imageURL,
-                content: json[i].content,
-                keywords: json[i].keywords,
-            } as BlogEntry);
-        }
-
-        return result;
-    } catch (error) {
-        throw error;
+    if (!validate(json)) {
+        throw validate.errors;
     }
+
+    return json;
 }
 
 /**
- * Scaffolds the blog site.
+ * Scaffolds the blog site, using arbitrary input.
  */
 export function scaffoldBlogSite(blogs: any): void {
     let database = createDatabase();

@@ -1,0 +1,28 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://caretparrot.github.io/blog",
+    "title": "Blog Entry Array",
+    "description": "A blog entry in a blog.js input.",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "definitions": {
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "datePublished": { "type": "string" },
+            "imageURL": { "type": "string" },
+            "content": { "type": "string" },
+            "keywords": {
+                "type": "array",
+                "items": { "type": "string" }
+            }
+        },
+        "required": [
+            "title",
+            "description",
+            "datePublished",
+            "imageURL",
+            "content"
+        ]
+    }
+}

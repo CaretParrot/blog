@@ -1,0 +1,8 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": ["${workspaceFolder}/src/blogs.json"],
+            "url": "./blogs.schema.json"
+        }
+    ]
+}
