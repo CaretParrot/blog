@@ -21,8 +21,8 @@ export class BlogEntryElement extends LitElement {
     @property({ type: String })
     keywords?: string = "";
 
-    @property({ type: String })
-    tags?: string = "";
+    @property({ type: Array<String> })
+    tags?: String[] = [];
 
     static styles = css`
         h1 {
@@ -52,9 +52,17 @@ export class BlogEntryElement extends LitElement {
 
     dateTemplate() {
         return html`
-            <time datetime="${this.datePublished}"
-                >${this.datePublished.toDateString()}</time
-            >
+            <time datetime="${this.datePublished}">
+                ${this.datePublished.toDateString()}
+            </time>
+        `;
+    }
+
+    tagsTemplate() {
+        return html`
+            ${this.tags?.map((tag) => {
+                html`<label>${tag}</label>`;
+            })}
         `;
     }
 

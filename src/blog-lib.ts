@@ -1,7 +1,7 @@
 import { BlogEntryElement } from "./components/blog-entry";
 import { BlogDatabaseElement } from "./components/blog-database";
 import { BlogSearchElement } from "./components/blog-search";
-import * as blogsSchema from "../blogs.schema.json" with { type: "json" };
+import * as blogsSchema from "../schemas/blogs-array.schema.json" with { type: "json" };
 import Ajv, { type JSONSchemaType } from "ajv";
 
 /**
@@ -18,46 +18,11 @@ export type BlogEntry = {
     datePublished: string;
     imageURL: string;
     content: string;
-    keywords?: string[];
     tags?: string[];
 };
 
-/**
- * Transforms the input schema input a format for Ajv.
- */
-
-let ajvSchema: JSONSchemaType<BlogEntryArray> = JSON.parse(
-    JSON.stringify(blogsSchema)
-);
-delete ajvSchema.$schema;
-
 const ajv = new Ajv();
-const validate = ajv.compile<BlogEntryArray>(ajvSchema);
-
-/**
- * Creates the database for the blogs.
- *
- * @returns
- */
-function createDatabase(): BlogDatabaseElement {
-    let database = document.createElement("blog-database");
-    document.body.appendChild(database);
-
-    return database;
-}
-
-/**
- * Creates a search bar and inserts it into the database.
- *
- * @param database
- * @returns
- */
-function createSearch(database: BlogDatabaseElement): BlogSearchElement {
-    let searchBar = document.createElement("blog-search");
-    database.appendChild(searchBar);
-
-    return searchBar;
-}
+const validate = ajv.compile<BlogEntryArray>(blogsSchema);
 
 /**
  * Adds an event listener to a search bar to filter for blog entries.
@@ -295,11 +260,13 @@ export function validateJSON(blogs: any): BlogEntry[] {
 /**
  * Scaffolds the blog site, using arbitrary input.
  */
-export function scaffoldBlogSite(blogs: any): void {
-    let database = createDatabase();
-    let searchBar = createSearch(database);
+export function scaffoldBlogSite(blogs: any): BlogDatabaseElement {
+    let database = document.createElement("blog-database");
+    let searchBar = document.createElement("blog-search");
+    database.appendChild(searchBar);
     let validatedJSON: BlogEntry[] = validateJSON(blogs);
 
     let blogElements = generateBlogs(validatedJSON, database);
     addSearchListener(searchBar, blogElements);
+    return database;
 }
