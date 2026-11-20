@@ -1,6 +1,6 @@
 import { scaffoldBlogSite } from "./blog-lib";
-import blogs from ".//blogs/10_15_26.json" with { type: "json" };
+import blogs from "./all-blogs.json" with { type: "json" };
 
 // Scaffolds the blog site with no custom settings
 
-document.body.appendChild(scaffoldBlogSite(blogs));
+document.body.appendChild(await scaffoldBlogSite(blogs));
