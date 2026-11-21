@@ -1,13 +1,6 @@
 import { BlogEntryElement } from "./components/blog-entry";
 import { BlogDatabaseElement } from "./components/blog-database";
 import { BlogSearchElement } from "./components/blog-search";
-import * as blogsSchema from "../schemas/blogs-array.schema.json" with { type: "json" };
-import Ajv from "ajv";
-
-/**
- * Defines the type to check input JSON files against.
- */
-export type BlogEntryArray = BlogEntry[];
 
 /**
  * Shape of each blog entry object.
@@ -20,9 +13,6 @@ export type BlogEntry = {
     content: string;
     tags?: string[];
 };
-
-const ajv = new Ajv();
-const validate = ajv.compile<BlogEntryArray>(blogsSchema);
 
 /**
  * Adds an event listener to a search bar to filter for blog entries.
@@ -240,35 +230,16 @@ async function generateBlogs(
 }
 
 /**
- * Validates the JSON input.
- * If the input is invalid, throws and error and stops rendering the page.
- * Otherwise, returns an array of blog entries.
- *
- * @param blogs
- * @returns
- */
-export async function validateJSON(blogs: any): Promise<BlogEntry[]> {
-    const json = typeof blogs === "string" ? JSON.parse(blogs) : blogs;
-
-    if (!validate(json)) {
-        throw validate.errors;
-    }
-
-    return json;
-}
-
-/**
  * Scaffolds the blog site, using arbitrary input.
  */
 export async function scaffoldBlogSite(
-    blogs: any
+    blogs: BlogEntry[]
 ): Promise<BlogDatabaseElement> {
     let database = document.createElement("blog-database");
     let searchBar = document.createElement("blog-search");
     database.appendChild(searchBar);
-    let validatedJSON: BlogEntry[] = await validateJSON(blogs);
 
-    let blogElements = await generateBlogs(validatedJSON, database);
+    let blogElements = await generateBlogs(blogs, database);
     addSearchListener(searchBar, blogElements);
     return database;
 }
