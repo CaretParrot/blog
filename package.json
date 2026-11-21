@@ -10,7 +10,6 @@
         "compile": "tsc && node --trace-deprecation dist/src/app.js"
     },
     "dependencies": {
-        "ajv": "^8.20.0",
         "lit": "^3.3.3"
     },
     "devDependencies": {
