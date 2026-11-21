@@ -1,7 +1,7 @@
 {
     "json.schemas": [
         {
-            "fileMatch": ["/blogs/*.json"],
+            "fileMatch": ["/blogs/**/*.json"],
             "url": "./schemas/blog-entry.schema.json"
         },
         {

@@ -2,35 +2,52 @@
 
 # Paths used in the compilation process
 
-blog_entry_schema="../schemas/blog-entry.schema.json"
-buffer="../src/all-blogs-buffer.json"
-target="../src/all-blogs.json"
+blog_directory="./blogs"
+blog_entry_schema="./schemas/blog-entry.schema.json"
+buffer="./src/all-blogs-buffer.json"
+target="./src/all-blogs.json"
 
 # Navigate to the blogs folder to read through the blogs
 
-cd blogs
+if [ ! -d $blog_directory ]; then
+    echo "$blog_directory is not a directory, exiting..."
+    exit 1
+fi
+
 touch $buffer
 echo "[" > $buffer
 
 # Loops through all files, checking against blog_entry_schema
 
-for FILE in *; do 
-    echo "Checking: $FILE..."
-    
-    ajv -s $blog_entry_schema -d "$FILE" --strict-required
+function traverse_blogs() {
+    local directory="$1"
 
-    # If the entry is invalid, delete the buffer and return a failure
+    for file in "$directory"/*; do
+        if [ -f "$file" ]; then
+            echo "Checking: $file..."
+            
+            ajv -s $blog_entry_schema -d "$file" --strict-required
 
-    if [ $? -ne 0 ]; then
-        rm $buffer
-        exit 1
-    fi
+            # If the entry is invalid, delete the buffer and return a failure
 
-    # Otherwise, write the contents of the file to the buffer
+            if [ $? -ne 0 ]; then
+                rm $buffer
+                exit 1
+            fi
 
-    cat "$FILE" >> $buffer
-    echo "," >> $buffer
-done
+            # Otherwise, write the contents of the file to the buffer
+
+            cat "$file" >> $buffer
+            echo "," >> $buffer
+        fi
+
+        if [ -d "$file" ]; then
+            traverse_blogs "$file"
+        fi
+    done
+}
+
+traverse_blogs "$blog_directory"
 
 echo "]" >> $buffer
 
