@@ -24,27 +24,15 @@ export class BlogSearchElement extends LitElement {
     static styles = css`
         input:focus,
         button:hover,
-        input:hover {
+        input:hover,
+        input[type="submit"]:hover {
             box-shadow: 0 0 calc(var(--base-unit) / 2)
                 calc(var(--base-unit) / 2) oklch(0 0 0 / 50%);
             -webkit-tap-highlight-color: transparent;
         }
 
-        ::selection {
-            color: var(--element);
-            background-color: var(--text);
-        }
-
-        ::-moz-selection {
-            color: var(--element);
-            background-color: var(--text);
-        }
-
         form {
             display: flex;
-            margin: 0;
-            padding: 0;
-            width: 100%;
             flex-flow: row wrap;
             justify-content: center;
         }
