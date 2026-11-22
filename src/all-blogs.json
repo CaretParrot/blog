@@ -5,6 +5,6 @@
         "datePublished": "November 21, 2026",
         "imageURL": "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png",
         "tags": ["first-blog", "introduction"],
-        "__content": "\r\n\r\n# This is my *new* first blog written in blog.js!\r\n\r\nHow does this work?\r\n\r\n```js\r\n    function helloWorld() {\r\n        console.log(\"Hello world!\");\r\n    }\r\n```"
+        "__content": "\r\n\r\n# This is my *new* first blog written in blog.js!\r\n\r\nHow does this work?"
     }
 ]
