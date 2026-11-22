@@ -196,7 +196,7 @@ async function defaultNavigation(
 
 /**
  *
- * Adds all blog entries to the document.
+ * Creates a list of blog entry elements from the input data.
  * Blogs are automatically sorted by date published.
  *
  * @param blogs
@@ -227,12 +227,6 @@ async function generateBlogs(
         (a, b) => b.datePublished.getTime() - a.datePublished.getTime()
     );
 
-    // Appends all blogs to the database
-
-    for (let i = 0; i < blogElements.length; i++) {
-        database.appendChild(blogElements[i]);
-    }
-
     database.entryCount = blogs.length;
 
     return blogElements;
@@ -252,6 +246,11 @@ export default async function scaffoldBlogSite(
     database.appendChild(searchBar);
 
     let blogElements = await generateBlogs(blogs, database);
+
+    for (let i = 0; i < blogElements.length; i++) {
+        database.appendChild(blogElements[i]);
+    }
+
     addSearchListener(searchBar, blogElements);
     return database;
 }
