@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Blogs Array",
+    "description": "An array of blog entries in a blog.js input.",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "datePublished": { "type": "string" },
+            "imageURL": { "type": "string" },
+            "__content": { "type": "string" },
+            "tags": {
+                "type": "array",
+                "items": { "type": "string" }
+            }
+        },
+        "required": [
+            "title",
+            "description",
+            "datePublished",
+            "imageURL",
+            "__content"
+        ],
+        "additionalProperties": false
+    }
+}

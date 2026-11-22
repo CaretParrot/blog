@@ -42,4 +42,10 @@ echo "]" >> $target
 
 npx prettier --write $target
 
+ajv -s "./schemas/blogs-array.schema.json" -d "./src/all-blogs.json"
+
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+
 exit 0
