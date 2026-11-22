@@ -1,10 +1,10 @@
 [
     {
-        "title": "Hello World!",
-        "description": "Testing out blog making in blog.js!",
-        "datePublished": "October 15, 2026",
+        "title": "New system for blog entries!",
+        "description": "You can now use MarkDown syntax to write blogs!",
+        "datePublished": "November 21, 2026",
         "imageURL": "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png",
-        "content": "This is my first blog using blog.js!",
-        "tags": ["first-post", "blogging"]
+        "tags": ["first-blog", "introduction"],
+        "__content": "\r\n\r\n# This is my *new* first blog written in blog.js!\r\n\r\nHow does this work?\r\n\r\n```js\r\n    function helloWorld() {\r\n        console.log(\"Hello world!\");\r\n    }\r\n```"
     }
 ]

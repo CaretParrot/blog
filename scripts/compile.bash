@@ -13,20 +13,6 @@ if [ ! -d $blog_directory ]; then
     exit 1
 fi
 
-echo "Starting compilation..."
-
-echo "----------"
-ajv -s $blog_entry_schema -d "$blog_directory/**/*.json" --strict-required
-echo "----------"
-
-if [ $? -ne 0 ]; then 
-    echo "ERROR: Invalid blog entry detected, terminating compilation..."
-    rm "$buffer"
-    exit 1
-fi
-
-echo "Validation success! Compiling into $target..."
-
 # Creates a buffer to avoid overwriting main file on failure
 
 touch $target
@@ -38,7 +24,7 @@ function traverse_blogs() {
     for file in "$directory"/*; do
         if [ -f "$file" ]; then
             echo "Adding: $file"
-            cat "$file" >> $target
+            cat "$file" | yaml-front-matter >> $target
             echo "," >> $target
         fi
 
