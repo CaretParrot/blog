@@ -1,6 +1,8 @@
 import { BlogEntryElement } from "./components/blog-entry";
 import { BlogDatabaseElement } from "./components/blog-database";
 import { BlogSearchElement } from "./components/blog-search";
+import { marked } from "marked";
+import DOMPurify from "isomorphic-dompurify";
 
 /**
  * Shape of each blog entry object.
@@ -10,7 +12,7 @@ export type BlogEntry = {
     description: string;
     datePublished: string;
     imageURL: string;
-    content: string;
+    __content: string;
     tags?: string[];
 };
 
@@ -143,10 +145,11 @@ function dateRangeQuery(
  */
 function createBlogEntry(blogsJSON: BlogEntry[], i: number): BlogEntryElement {
     let newBlog: BlogEntryElement = document.createElement("blog-entry");
-    newBlog.title = blogsJSON[i]["title"];
-    newBlog.description = blogsJSON[i]["description"];
-    newBlog.imageURL = blogsJSON[i]["imageURL"] || "";
-    newBlog.datePublished = new Date(blogsJSON[i]["datePublished"]);
+    newBlog.title = blogsJSON[i].title;
+    newBlog.description = blogsJSON[i].description;
+    newBlog.imageURL = blogsJSON[i].imageURL || "";
+    newBlog.datePublished = new Date(blogsJSON[i].datePublished);
+
     return newBlog;
 }
 
@@ -158,20 +161,22 @@ function createBlogEntry(blogsJSON: BlogEntry[], i: number): BlogEntryElement {
  * @param blogs
  * @param i
  */
-function defaultNavigation(
+async function defaultNavigation(
     database: BlogDatabaseElement,
     blogs: BlogEntry[],
     i: number
-): void {
+): Promise<void> {
     // Hides the main database and creates the blog post page
 
     database.style.display = "none";
     let backButton: HTMLButtonElement = document.createElement("button");
     let blogPost: HTMLDivElement = document.createElement("div");
 
-    // Fills in the blog content
+    // Fills in the blog content by parsing and sanitizing the Markdown
 
-    blogPost.innerHTML = blogs[i]["content"];
+    blogPost.innerHTML = DOMPurify.sanitize(
+        await marked.parse(blogs[i].__content)
+    );
 
     // Sets the back button to point back to the database page
 
@@ -216,9 +221,13 @@ async function generateBlogs(
         };
     }
 
+    // Sorts the blogs by date published
+
     blogElements.sort(
         (a, b) => b.datePublished.getTime() - a.datePublished.getTime()
     );
+
+    // Appends all blogs to the database
 
     for (let i = 0; i < blogElements.length; i++) {
         database.appendChild(blogElements[i]);
@@ -231,8 +240,11 @@ async function generateBlogs(
 
 /**
  * Scaffolds the blog site, using arbitrary input.
+ *
+ * Does not handle data validation. Please install ajv-cli for JSON blogs, support for MarkDown
+ * metadata validation may be planned with better support.
  */
-export async function scaffoldBlogSite(
+export default async function scaffoldBlogSite(
     blogs: BlogEntry[]
 ): Promise<BlogDatabaseElement> {
     let database = document.createElement("blog-database");
