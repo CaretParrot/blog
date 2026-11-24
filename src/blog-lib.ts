@@ -257,7 +257,7 @@ export default async function scaffoldBlogSite(
     let database = document.createElement("blog-database");
     let searchBar;
 
-    if (!blogScaffoldConfig.searchBar) {
+    if (blogScaffoldConfig.searchBar) {
         searchBar = document.createElement("blog-search");
         database.appendChild(searchBar);
     }
@@ -268,7 +268,7 @@ export default async function scaffoldBlogSite(
         database.appendChild(blogElements[i]);
     }
 
-    if (!blogScaffoldConfig.searchBar && searchBar !== undefined) {
+    if (blogScaffoldConfig.searchBar && searchBar !== undefined) {
         addSearchListener(searchBar, blogElements);
     }
 
