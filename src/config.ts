@@ -1,3 +1,3 @@
-export type blogScaffoldConfig = {
+export type BlogScaffoldConfig = {
     searchBar?: boolean;
 };
