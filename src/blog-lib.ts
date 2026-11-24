@@ -1,6 +1,7 @@
 import { BlogEntryElement } from "./components/blog-entry";
 import { BlogDatabaseElement } from "./components/blog-database";
 import { BlogSearchElement } from "./components/blog-search";
+import { type blogScaffoldConfig } from "./config";
 import { marked } from "marked";
 import DOMPurify from "isomorphic-dompurify";
 
@@ -13,7 +14,7 @@ export type BlogEntry = {
     datePublished: string;
     imageURL: string;
     __content: string;
-    tags?: string[];
+    tags: string[];
 };
 
 /**
@@ -32,6 +33,10 @@ function addSearchListener(
     blogSearch.addEventListener("filterentries", () => {
         blogSearch.resultsCount = applyFilters(blogEntries, blogSearch);
     });
+
+    blogSearch.oninput = () => {
+        blogSearch.resultsCount = applyFilters(blogEntries, blogSearch);
+    };
 
     blogSearch.minDate = blogEntries[0].datePublished;
     blogSearch.maxDate = new Date();
@@ -145,10 +150,12 @@ function dateRangeQuery(
  */
 function createBlogEntry(blogsJSON: BlogEntry[], i: number): BlogEntryElement {
     let newBlog: BlogEntryElement = document.createElement("blog-entry");
+
     newBlog.title = blogsJSON[i].title;
     newBlog.description = blogsJSON[i].description;
-    newBlog.imageURL = blogsJSON[i].imageURL || "";
+    newBlog.imageURL = blogsJSON[i].imageURL;
     newBlog.datePublished = new Date(blogsJSON[i].datePublished);
+    newBlog.tags = blogsJSON[i].tags;
 
     return newBlog;
 }
@@ -180,7 +187,9 @@ async function defaultNavigation(
 
     // Sets the back button to point back to the database page
 
-    backButton.innerHTML = "&lt-";
+    backButton.innerHTML = "Back";
+    backButton.style.cursor = "pointer";
+    backButton.style.fontFamily = "inherit";
 
     backButton.onclick = () => {
         backButton.remove();
@@ -189,6 +198,7 @@ async function defaultNavigation(
     };
 
     // Adds the elements to the DOM
+
 
     document.body.appendChild(backButton);
     document.body.appendChild(blogPost);
@@ -244,6 +254,8 @@ export default async function scaffoldBlogSite(
     let database = document.createElement("blog-database");
     let searchBar = document.createElement("blog-search");
     database.appendChild(searchBar);
+
+    
 
     let blogElements = await generateBlogs(blogs, database);
 

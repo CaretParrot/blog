@@ -26,8 +26,6 @@ export class BlogSearchElement extends LitElement {
         button:hover,
         input:hover,
         input[type="submit"]:hover {
-            box-shadow: 0 0 calc(var(--base-unit) / 2)
-                calc(var(--base-unit) / 2) oklch(0 0 0 / 50%);
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -40,11 +38,12 @@ export class BlogSearchElement extends LitElement {
         input,
         button,
         label {
-            border: calc(var(--base-unit) / 4) solid hsla(0, 0%, 0%, 1);
+            font-family: inherit;
+            border: inherit;
             border-radius: var(--base-unit);
             padding: var(--base-unit);
             margin: var(--base-unit);
-            background-color: var(--element);
+            background-color: var(--element-container);
         }
 
         input[type="submit"] {
