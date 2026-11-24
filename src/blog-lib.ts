@@ -1,7 +1,7 @@
 import { BlogEntryElement } from "./components/blog-entry";
 import { BlogDatabaseElement } from "./components/blog-database";
 import { BlogSearchElement } from "./components/blog-search";
-import { type blogScaffoldConfig } from "./config";
+import { type BlogScaffoldConfig } from "./config";
 import { marked } from "marked";
 import DOMPurify from "isomorphic-dompurify";
 
@@ -249,13 +249,18 @@ async function generateBlogs(
  * metadata validation may be planned with better support.
  */
 export default async function scaffoldBlogSite(
-    blogs: BlogEntry[]
+    blogs: BlogEntry[],
+    blogScaffoldConfig: BlogScaffoldConfig = {
+        searchBar: true
+    }
 ): Promise<BlogDatabaseElement> {
     let database = document.createElement("blog-database");
-    let searchBar = document.createElement("blog-search");
-    database.appendChild(searchBar);
+    let searchBar;
 
-    
+    if (!blogScaffoldConfig.searchBar) {
+        searchBar = document.createElement("blog-search");
+        database.appendChild(searchBar);
+    }
 
     let blogElements = await generateBlogs(blogs, database);
 
@@ -263,6 +268,9 @@ export default async function scaffoldBlogSite(
         database.appendChild(blogElements[i]);
     }
 
-    addSearchListener(searchBar, blogElements);
+    if (!blogScaffoldConfig.searchBar && searchBar !== undefined) {
+        addSearchListener(searchBar, blogElements);
+    }
+
     return database;
 }
