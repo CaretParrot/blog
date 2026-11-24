@@ -18,23 +18,30 @@ export class BlogEntryElement extends LitElement {
     @property({ type: String })
     content: string = "";
 
-    @property({ type: String })
-    keywords?: string = "";
-
     @property({ type: Array<String> })
-    tags?: String[] = [];
+    tags: String[] = [];
 
     static styles = css`
-        h1 {
-            line-height: 1.5;
-        }
-
         img {
             width: 100%;
         }
 
         time {
             font-style: italic;
+        }
+
+        .small {
+            background-color: var(--element-container);
+            width: fit-content;
+            font-size: 0.75rem;
+            border-radius: var(--base-unit);
+            padding: calc(var(--base-unit) / 2);
+        }
+
+        div div {
+            display: flex;
+            padding: 0;
+            margin: 0;
         }
     `;
 
@@ -43,7 +50,7 @@ export class BlogEntryElement extends LitElement {
     }
 
     descriptionTemplate() {
-        return html`<p>${this.description}</p>`;
+        return html`<p class="small">${this.description}</p>`;
     }
 
     imageTemplate() {
@@ -59,18 +66,23 @@ export class BlogEntryElement extends LitElement {
     }
 
     tagsTemplate() {
+        
         return html`
-            ${this.tags?.map((tag) => {
-                html`<label>${tag}</label>`;
-            })}
+            <div>
+                ${this.tags.map((tag) => 
+                    html`<label class="small">${tag}</label>`
+                )}
+            </div>
         `;
     }
 
     render() {
         return html`
             <div>
-                ${this.titleTemplate()} ${this.dateTemplate()}
+                ${this.titleTemplate()} 
+                ${this.dateTemplate()}
                 ${this.descriptionTemplate()}
+                ${this.tagsTemplate()}
             </div>
 
             ${this.imageTemplate()}

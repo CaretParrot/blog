@@ -1,10 +1,10 @@
 [
     {
         "title": "New system for blog entries!",
-        "description": "You can now use MarkDown syntax to write blogs!",
         "datePublished": "November 21, 2026",
+        "description": "You can now use MarkDown syntax to write blogs!",
         "imageURL": "https://caretparrot.github.io/papaya-salad/Profile%20Picture.png",
-        "tags": ["first-blog", "introduction"],
-        "__content": "\r\n\r\n# This is my *new* first blog written in blog.js!\r\n\r\nHow does this work?"
+        "tags": ["first-post", "blogging"],
+        "__content": "\r\n\r\n# This is my new first blog written in blog.js!\r\n\r\nHow does this work?"
     }
 ]
