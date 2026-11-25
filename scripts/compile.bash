@@ -2,9 +2,10 @@
 
 # Paths used in the compilation process
 
-blog_directory="./blogs"
-blog_entry_schema="./schemas/blog-entry.schema.json"
-target="./src/all-blogs.json"
+DEFAULT_BLOG_DIRECTORY="./blogs"
+blog_directory="${1:-$DEFAULT_BLOG_DIRECTORY}"
+BLOG_ENTRY_SCHEMA="./schemas/blog-entry.schema.json"
+TARGET="./src/all-blogs.json"
 
 # If the blog directory is not a directory, exit with error
 
@@ -13,20 +14,24 @@ if [ ! -d $blog_directory ]; then
     exit 1
 fi
 
-# Creates a buffer to avoid overwriting main file on failure
+# Create the target file, then start compilation
 
-touch $target
-echo "[" > $target
+touch $TARGET
+echo "[" > $TARGET
 
 function traverse_blogs() {
     local directory="$1"
 
+    # For each file in the directory, parse it through yaml-front-matter, then write it to the target
+
     for file in "$directory"/*; do
         if [ -f "$file" ]; then
             echo "Adding: $file"
-            cat "$file" | yaml-front-matter >> $target
-            echo "," >> $target
+            cat "$file" | yaml-front-matter >> $TARGET
+            echo "," >> $TARGET
         fi
+
+        # Traverses directories recursively
 
         if [ -d "$file" ]; then
             traverse_blogs "$file"
@@ -36,11 +41,13 @@ function traverse_blogs() {
 
 traverse_blogs "$blog_directory"
 
-echo "]" >> $target
+echo "]" >> $TARGET
 
 # Clears up trailing commas, adds formatting
 
-npx prettier --write $target
+npx prettier --write $TARGET
+
+# Validates the data to check for missing or misaligned metadata
 
 ajv -s "./schemas/blogs-array.schema.json" -d "./src/all-blogs.json"
 

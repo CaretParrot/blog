@@ -66,11 +66,10 @@ export class BlogEntryElement extends LitElement {
     }
 
     tagsTemplate() {
-        
         return html`
             <div>
-                ${this.tags.map((tag) => 
-                    html`<label class="small">${tag}</label>`
+                ${this.tags.map(
+                    (tag) => html`<label class="small">${tag}</label>`
                 )}
             </div>
         `;
@@ -79,10 +78,8 @@ export class BlogEntryElement extends LitElement {
     render() {
         return html`
             <div>
-                ${this.titleTemplate()} 
-                ${this.dateTemplate()}
-                ${this.descriptionTemplate()}
-                ${this.tagsTemplate()}
+                ${this.titleTemplate()} ${this.dateTemplate()}
+                ${this.descriptionTemplate()} ${this.tagsTemplate()}
             </div>
 
             ${this.imageTemplate()}

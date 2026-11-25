@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 :root {
     color-scheme: light dark;
@@ -115,6 +115,10 @@ button {
     margin: 0;
 }
 
+body * {
+    gap: var(--base-unit);
+}
+
 blog-database {
     background-color: transparent;
     margin: 0;
@@ -122,7 +126,6 @@ blog-database {
     padding: 0;
     display: grid;
     grid: auto / auto;
-    gap: var(--base-unit);
 }
 
 blog-entry {
@@ -131,6 +134,7 @@ blog-entry {
     cursor: pointer;
     padding: var(--base-unit);
     background-color: var(--container);
+    gap: var(--base-unit);
 }
 
 blog-search {
@@ -151,4 +155,10 @@ em {
     font-size: inherit;
     font-weight: inherit;
     border: none;
+}
+
+@media (orientation: portrait) {
+    body {
+        width: 100%;
+    }
 }
