@@ -58,13 +58,14 @@ Compilation involves...
 - Applying Prettier to format the file.
 - Validating the metadata of all Markdown files through ajv. This ensures that metadata required for the blog database viewer is present.
 
-To compile your blogs, run the following command **in the root directory of your repository**:
+To compile your blogs, run the following command **in the root directory of your repository**...
 
 ```bash
 bash scripts/compile.bash [blog-directory]
 ```
 
 Executing the command with no arguments compiles all files from the "blogs" directory in the root of the repository. You can also pass in a path to a different folder if you want to keep your blogs elsewhere.
+>The compilation process does not spellcheck your blogs. It's recommend to use a CLI or web tool to spellcheck your posts before compilation.
 
 # Testing
 

@@ -1,87 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
-:root {
-    color-scheme: light dark;
-    --base-unit: 1rem;
-
-    --teal: 210;
-    --blue: 240;
-    --purple: 270;
-
-    --white: hsl(0, 0%, 90%);
-    --black: hsl(0, 0%, 10%);
-
-    --saturation: 20%;
-
-    --bright-1: 15%;
-    --bright-2: 25%;
-    --bright-3: 35%;
-    --bright-4: 50%;
-    --bright-5: 65%;
-    --bright-6: 75%;
-    --bright-7: 85%;
-
-    --blue-1: hsl(var(--blue), var(--saturation), var(--bright-1));
-    --blue-2: hsl(var(--blue), var(--saturation), var(--bright-2));
-    --blue-3: hsl(var(--blue), var(--saturation), var(--bright-3));
-    --blue-4: hsl(var(--blue), var(--saturation), var(--bright-4));
-    --blue-5: hsl(var(--blue), var(--saturation), var(--bright-5));
-    --blue-6: hsl(var(--blue), var(--saturation), var(--bright-6));
-    --blue-7: hsl(var(--blue), var(--saturation), var(--bright-7));
-
-    --teal-1: hsl(var(--teal), var(--saturation), var(--bright-1));
-    --teal-2: hsl(var(--teal), var(--saturation), var(--bright-2));
-    --teal-3: hsl(var(--teal), var(--saturation), var(--bright-3));
-    --teal-4: hsl(var(--teal), var(--saturation), var(--bright-4));
-    --teal-5: hsl(var(--teal), var(--saturation), var(--bright-5));
-    --blue-6: hsl(var(--teal), var(--saturation), var(--bright-6));
-    --blue-7: hsl(var(--teal), var(--saturation), var(--bright-7));
-
-    --purple-1: hsl(var(--purple), var(--saturation), var(--bright-1));
-    --purple-2: hsl(var(--purple), var(--saturation), var(--bright-2));
-    --purple-3: hsl(var(--purple), var(--saturation), var(--bright-3));
-    --purple-4: hsl(var(--purple), var(--saturation), var(--bright-4));
-    --purple-5: hsl(var(--purple), var(--saturation), var(--bright-5));
-    --purple-6: hsl(var(--purple), var(--saturation), var(--bright-6));
-    --purple-7: hsl(var(--purple), var(--saturation), var(--bright-7));
-
-    --background: light-dark(var(--blue-7), var(--blue-1));
-    --element: light-dark(var(--blue-6), var(--blue-2));
-    --container: light-dark(var(--blue-6), var(--blue-2));
-    --element-container: light-dark(var(--blue-7), var(--blue-1));
-    --text: light-dark(var(--black), var(--white));
-
-    --border-size: calc(var(--base-unit) / 4);
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    display: grid;
-    grid: auto / 1fr;
-    gap: var(--base-unit);
-    width: 80%;
-
-    margin-top: var(--base-unit);
-    margin-bottom: var(--base-unit);
-    margin-left: auto;
-    margin-right: auto;
-
-    background-color: var(--background);
-    color: var(--text);
-
+html {
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-}
-
-body * {
-    margin: 0;
-    border-radius: var(--base-unit);
 }
 
 h1,
@@ -96,36 +20,14 @@ h6 {
     font-style: normal;
 }
 
-div {
-    padding: var(--base-unit);
-    border-radius: var(--base-unit);
-
-    display: grid;
-    grid: auto / 1fr;
-    gap: var(--base-unit);
-
-    background-color: var(--container);
-}
-
-button {
-    background-color: var(--element);
-    border: inherit;
-    border-radius: var(--base-unit);
-    padding: var(--base-unit);
-    margin: 0;
-}
-
 body * {
     gap: var(--base-unit);
 }
 
 blog-database {
-    background-color: transparent;
-    margin: 0;
-    border: none;
-    padding: 0;
     display: grid;
-    grid: auto / auto;
+    grid: auto / 1fr;
+    gap: var(--base-unit);
 }
 
 blog-entry {
@@ -138,27 +40,21 @@ blog-entry {
 }
 
 blog-search {
-    display: block;
     background-color: var(--container);
+    display: flex;
     flex-flow: row wrap;
-    padding: 0;
+    justify-content: center;
 }
 
-slot {
-    margin: 0;
-    padding: 0;
-}
-
-strong,
 em {
-    padding: 0;
-    font-size: inherit;
-    font-weight: inherit;
-    border: none;
+    font-style: italic;
 }
 
-@media (orientation: portrait) {
-    body {
-        width: 100%;
-    }
+strong {
+    font-weight: bold;
+}
+
+button {
+    font-family: "Inter" !important;
+    font-size: 0.75rem;
 }

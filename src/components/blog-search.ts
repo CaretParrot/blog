@@ -104,26 +104,11 @@ export class BlogSearchElement extends LitElement {
 
     render() {
         return html`
-            <form
-                action="/"
-                @submit="${(event: Event) => {
-                    event.preventDefault();
-                    this.filterEntries();
-                }}"
-            >
-                ${this.inputTemplate()} ${this.dateRangeTemplate()}
-                ${this.filterButtonTemplate()} ${this.resultsCountTemplate()}
-            </form>
+            ${this.inputTemplate()} 
+            ${this.dateRangeTemplate()}
+            ${this.filterButtonTemplate()} 
+            ${this.resultsCountTemplate()}
         `;
-    }
-
-    filterEntries() {
-        this.dispatchEvent(
-            new CustomEvent("filterentries", {
-                bubbles: true,
-                composed: true,
-            })
-        );
     }
 }
 

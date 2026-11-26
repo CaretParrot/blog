@@ -30,16 +30,12 @@ function addSearchListener(
 ) {
     blogSearch.resultsCount = blogEntries.length;
 
-    blogSearch.addEventListener("filterentries", () => {
-        blogSearch.resultsCount = applyFilters(blogEntries, blogSearch);
-    });
-
     blogSearch.oninput = () => {
         blogSearch.resultsCount = applyFilters(blogEntries, blogSearch);
     };
 
     blogSearch.minDate = blogEntries[blogEntries.length - 1].datePublished;
-    blogSearch.maxDate = new Date();
+    blogSearch.maxDate = blogEntries[0].datePublished;
     blogSearch.startDate = blogSearch.minDate;
     blogSearch.endDate = blogSearch.maxDate;
 }
@@ -243,8 +239,8 @@ async function generateBlogs(
 /**
  * Scaffolds the blog site, using arbitrary input.
  *
- * Does not handle data validation. Please install ajv-cli for JSON blogs, support for MarkDown
- * metadata validation may be planned with better support.
+ * Does not handle data validation. Please check the this project's README file for data validation 
+ * handling.
  */
 export default async function scaffoldBlogSite(
     blogs: BlogEntry[],
