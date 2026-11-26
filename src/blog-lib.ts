@@ -30,16 +30,12 @@ function addSearchListener(
 ) {
     blogSearch.resultsCount = blogEntries.length;
 
-    blogSearch.addEventListener("filterentries", () => {
-        blogSearch.resultsCount = applyFilters(blogEntries, blogSearch);
-    });
-
     blogSearch.oninput = () => {
         blogSearch.resultsCount = applyFilters(blogEntries, blogSearch);
     };
 
-    blogSearch.minDate = blogEntries[0].datePublished;
-    blogSearch.maxDate = new Date();
+    blogSearch.minDate = blogEntries[blogEntries.length - 1].datePublished;
+    blogSearch.maxDate = blogEntries[0].datePublished;
     blogSearch.startDate = blogSearch.minDate;
     blogSearch.endDate = blogSearch.maxDate;
 }
@@ -126,8 +122,7 @@ function dateRangeQuery(
     for (let i = 0; i < blogEntries.length; i++) {
         if (
             blogEntries[i].datePublished >= startDate &&
-            blogEntries[i].datePublished <= endDate &&
-            blogEntries[i].style.display !== "none"
+            blogEntries[i].datePublished <= endDate
         ) {
             blogEntries[i].style.display = "grid";
             filteredResultsCount++;
@@ -199,7 +194,6 @@ async function defaultNavigation(
 
     // Adds the elements to the DOM
 
-
     document.body.appendChild(backButton);
     document.body.appendChild(blogPost);
 }
@@ -245,13 +239,13 @@ async function generateBlogs(
 /**
  * Scaffolds the blog site, using arbitrary input.
  *
- * Does not handle data validation. Please install ajv-cli for JSON blogs, support for MarkDown
- * metadata validation may be planned with better support.
+ * Does not handle data validation. Please check the this project's README file for data validation 
+ * handling.
  */
 export default async function scaffoldBlogSite(
     blogs: BlogEntry[],
     blogScaffoldConfig: BlogScaffoldConfig = {
-        searchBar: true
+        searchBar: true,
     }
 ): Promise<BlogDatabaseElement> {
     let database = document.createElement("blog-database");
