@@ -54,13 +54,14 @@ function applyFilters(
     blogSearch: BlogSearchElement
 ): number {
     let finalResultsCount = 0;
-    finalResultsCount = searchQuery(blogEntries, blogSearch.query);
 
     finalResultsCount = dateRangeQuery(
         blogEntries,
         blogSearch.startDate,
         blogSearch.endDate
     );
+
+    finalResultsCount = searchQuery(blogEntries, blogSearch.query);
 
     return finalResultsCount;
 }

@@ -22,19 +22,6 @@ export class BlogSearchElement extends LitElement {
     maxDate: Date = new Date("");
 
     static styles = css`
-        input:focus,
-        button:hover,
-        input:hover,
-        input[type="submit"]:hover {
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        form {
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: center;
-        }
-
         input,
         button,
         label {
@@ -42,7 +29,7 @@ export class BlogSearchElement extends LitElement {
             border: inherit;
             border-radius: var(--base-unit);
             padding: var(--base-unit);
-            margin: var(--base-unit);
+            margin: 0;
             background-color: var(--element-container);
         }
 
@@ -52,7 +39,6 @@ export class BlogSearchElement extends LitElement {
 
         #arrows {
             background-color: transparent;
-            border: none;
             margin: 0;
             padding: 0;
             align-items: center;
