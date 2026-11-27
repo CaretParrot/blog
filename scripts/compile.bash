@@ -19,6 +19,8 @@ fi
 touch $TARGET
 echo "[" > $TARGET
 
+declare -i i=0
+
 function traverse_blogs() {
     local directory="$1"
 
@@ -26,7 +28,8 @@ function traverse_blogs() {
 
     for file in "$directory"/*; do
         if [ -f "$file" ]; then
-            echo "Adding: $file"
+            echo "$i: $file"
+            i+=1
             cat "$file" | yaml-front-matter >> $TARGET
             echo "," >> $TARGET
         fi
@@ -49,7 +52,7 @@ npx prettier --write $TARGET
 
 # Validates the data to check for missing or misaligned metadata
 
-ajv -s "./schemas/blogs-array.schema.json" -d "./src/all-blogs.json"
+ajv -s "./schemas/blogs-array.schema.json" -d "./src/all-blogs.json" --errors=text
 
 if [ $? -ne 0 ]; then
     exit 1

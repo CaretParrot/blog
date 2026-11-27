@@ -104,10 +104,8 @@ export class BlogSearchElement extends LitElement {
 
     render() {
         return html`
-            ${this.inputTemplate()} 
-            ${this.dateRangeTemplate()}
-            ${this.filterButtonTemplate()} 
-            ${this.resultsCountTemplate()}
+            ${this.inputTemplate()} ${this.dateRangeTemplate()}
+            ${this.filterButtonTemplate()} ${this.resultsCountTemplate()}
         `;
     }
 }

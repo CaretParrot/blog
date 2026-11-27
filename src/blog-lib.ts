@@ -239,7 +239,7 @@ async function generateBlogs(
 /**
  * Scaffolds the blog site, using arbitrary input.
  *
- * Does not handle data validation. Please check the this project's README file for data validation 
+ * Does not handle data validation. Please check the this project's README file for data validation
  * handling.
  */
 export default async function scaffoldBlogSite(

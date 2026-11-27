@@ -37,6 +37,7 @@ blog-entry {
     padding: var(--base-unit);
     background-color: var(--container);
     gap: var(--base-unit);
+    align-items: center;
 }
 
 blog-search {
@@ -44,6 +45,7 @@ blog-search {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
+    gap: 0;
 }
 
 em {
@@ -55,6 +57,6 @@ strong {
 }
 
 button {
-    font-family: "Inter" !important;
+    font-family: "Inter";
     font-size: 0.75rem;
 }

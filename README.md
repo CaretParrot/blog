@@ -65,7 +65,8 @@ bash scripts/compile.bash [blog-directory]
 ```
 
 Executing the command with no arguments compiles all files from the "blogs" directory in the root of the repository. You can also pass in a path to a different folder if you want to keep your blogs elsewhere.
->The compilation process does not spellcheck your blogs. It's recommend to use a CLI or web tool to spellcheck your posts before compilation.
+
+> The compilation process does not spellcheck your blogs. It's recommend to use a CLI or web tool to spellcheck your posts before compilation.
 
 # Testing
 
